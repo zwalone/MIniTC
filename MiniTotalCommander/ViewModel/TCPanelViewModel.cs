@@ -18,21 +18,21 @@ namespace MiniTotalCommander.ViewModel
         public string CurDrive
         {
             get { return _curDrive; }
-            set { SetProperty(ref _curDrive, value); DriveChange(); } // OnDriveChange
+            set { SetProperty(ref _curDrive, value); DriveChange(); }
         }
 
         private string _curPath;
         public string CurPath
         {
             get { return _curPath; }
-            set { SetProperty(ref _curPath, value); }//UpdateContent();
+            set { SetProperty(ref _curPath, value); }
         }
 
         private string _selectedFile;
         public string SelectedFile
         {
             get { return _selectedFile; }
-            set { SetProperty(ref _selectedFile, value); } // ChangeDirectory(Files[0]); 
+            set { SetProperty(ref _selectedFile, value); }
         }
 
         private List<string> _drives;
@@ -66,7 +66,6 @@ namespace MiniTotalCommander.ViewModel
 
         public TCPanelViewModel()
         {
-            //ChangeDirCommand = new RelayCommand(ChangeDirectory); //change go to
             Files = new List<string>();
             Drives = new List<string>();
             UpdateDrives();
@@ -76,8 +75,7 @@ namespace MiniTotalCommander.ViewModel
 
         public void UpdateContent()
         {
-            Files = new List<string>(); //CurPath
-            //Files.Clear();
+            Files = new List<string>(); 
             Files.Add("...");
             Directory.GetDirectories(CurPath).ToList().ForEach(x => Files.Add($"<D> {x}"));
             Directory.GetFiles(CurPath).ToList().ForEach(x => Files.Add(x));
@@ -92,7 +90,6 @@ namespace MiniTotalCommander.ViewModel
 
         public void UpdateDrives()
         {
-            //Drives = new List<string>();
             Drives.Clear();
             Directory.GetLogicalDrives().ToList().ForEach(x => Drives.Add(x));
         }
@@ -106,30 +103,27 @@ namespace MiniTotalCommander.ViewModel
         public void ChangeDirectory()
         {
             string dir = _selectedFile;
-            //string dir = "C:\\UnityProject";
             if (dir != null)
             {
                 if (dir == "...")
                 {
-                    string[] array = CurPath.Split('\\');
-                    CurPath = CurPath.Replace('\\' + array.Last(), "");
-                    UpdateContent();
+                    if (CurPath.EndsWith("\\")) { }
+                    else
+                    {
+                        CurPath = Directory.GetParent(CurPath).FullName;
+                        UpdateContent();
+                    }
+                    
                 }
                 else if (dir.Contains("<D>"))
                 {
                     dir = dir.Replace("<D> ", "");
-                    if (CurPath.Length >= 4) CurPath += '\\' + dir;//+ dir
+                    if (CurPath.Length >= 4) CurPath += '\\' + dir;
                     else CurPath += dir;
                     UpdateContent();
                 }
             }
             
-        }
-
-        public void GoTo()
-        {
-            CurPath = "C:\\UnityProject";
-            //UpdateContent();
         }
     }
 }

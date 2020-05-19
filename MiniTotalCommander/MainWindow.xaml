@@ -43,6 +43,9 @@
                       OpenDirCommand="{Binding To.ChangeDirCommand}"
                       />
 
-        <Button Grid.Row="1" Grid.ColumnSpan="2" Margin="350,10" Content="{Binding Source={x:Static resx:Resources.copyButton}}"/>
+        <Button Grid.Row="1" Grid.ColumnSpan="2" Margin="350,10" 
+                Content="{Binding Source={x:Static resx:Resources.copyButton}}"
+                Command="{Binding CopyButtonCommand}"
+                />
     </Grid>
 </Window>
