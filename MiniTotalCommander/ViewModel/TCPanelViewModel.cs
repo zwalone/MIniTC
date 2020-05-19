@@ -25,7 +25,7 @@ namespace MiniTotalCommander.ViewModel
         public string CurPath
         {
             get { return _curPath; }
-            set { SetProperty(ref _curPath, value); UpdateContent(); }
+            set { SetProperty(ref _curPath, value); }//UpdateContent();
         }
 
         private string _selectedFile;
@@ -76,7 +76,8 @@ namespace MiniTotalCommander.ViewModel
 
         public void UpdateContent()
         {
-            Files = new List<string>();
+            //Files = new List<string>(); CurPath
+            Files.Clear();
             Files.Add("...");
             Directory.GetDirectories(CurPath).ToList().ForEach(x => Files.Add($"<D> {x}"));
             Directory.GetFiles(CurPath).ToList().ForEach(x => Files.Add(x));
@@ -99,26 +100,30 @@ namespace MiniTotalCommander.ViewModel
         public void DriveChange()
         {
             CurPath = CurDrive;
-            //UpdateContent();
+            UpdateContent();
         }
 
         public void ChangeDirectory()
         {
-            //string dir = SelectedFile;
-            string dir = "C:\\UnityProject";
-            if (dir == "...")
+            string dir = _selectedFile;
+            //string dir = "C:\\UnityProject";
+            if (dir != null)
             {
-                string[] array = CurPath.Split('\\');
-                CurPath = CurPath.Replace('\\' + array.Last(), "");
-                UpdateContent();
+                if (dir == "...")
+                {
+                    string[] array = CurPath.Split('\\');
+                    CurPath = CurPath.Replace('\\' + array.Last(), "");
+                    UpdateContent();
+                }
+                else if (dir.Contains("<D>"))
+                {
+                    dir = dir.Replace("<D> ", "");
+                    if (CurPath.Length >= 4) CurPath += '\\' + dir;//+ dir
+                    else CurPath += dir;
+                    UpdateContent();
+                }
             }
-            else if (dir.Contains("<D>"))
-            {
-                dir = dir.Replace("<D>", "");
-                if (CurPath.Length >= 4) CurPath += '\\' + dir;
-                else CurPath += dir;
-                UpdateContent();
-            }
+            
         }
 
         public void GoTo()
