@@ -76,8 +76,8 @@ namespace MiniTotalCommander.ViewModel
 
         public void UpdateContent()
         {
-            //Files = new List<string>(); CurPath
-            Files.Clear();
+            Files = new List<string>(); //CurPath
+            //Files.Clear();
             Files.Add("...");
             Directory.GetDirectories(CurPath).ToList().ForEach(x => Files.Add($"<D> {x}"));
             Directory.GetFiles(CurPath).ToList().ForEach(x => Files.Add(x));
